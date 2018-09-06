@@ -1,0 +1,265 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="BankDbModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Accounts">
+    <Key>
+      <PropertyRef Name="AccountNumber" />
+    </Key>
+    <Property Name="AccountNumber" Type="int" Nullable="false" />
+    <Property Name="MemberId" Type="int" Nullable="false" />
+    <Property Name="AccountTypeId" Type="int" Nullable="false" />
+    <Property Name="CurrentBalance" Type="money" />
+    <Property Name="OpenDate" Type="date" Nullable="false" />
+    <Property Name="AccountStatusCode" Type="nchar" MaxLength="1" Nullable="false" />
+    <Property Name="Overdraft" Type="bit" Nullable="false" />
+  </EntityType>
+  <EntityType Name="AccountStatuses">
+    <Key>
+      <PropertyRef Name="AccountStatusCode" />
+    </Key>
+    <Property Name="AccountStatusCode" Type="nchar" MaxLength="1" Nullable="false" />
+    <Property Name="Description" Type="nvarchar" MaxLength="200" />
+  </EntityType>
+  <EntityType Name="AccountTypes">
+    <Key>
+      <PropertyRef Name="AccountTypeId" />
+    </Key>
+    <Property Name="AccountTypeId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="AccountType" Type="nvarchar" MaxLength="10" Nullable="false" />
+    <Property Name="Description" Type="nvarchar" MaxLength="200" />
+  </EntityType>
+  <EntityType Name="Loans">
+    <Key>
+      <PropertyRef Name="LoanId" />
+    </Key>
+    <Property Name="LoanId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="MemberId" Type="int" Nullable="false" />
+    <Property Name="LoanTypeId" Type="int" Nullable="false" />
+    <Property Name="LoanStatusId" Type="int" Nullable="false" />
+    <Property Name="IssueDate" Type="date" />
+    <Property Name="Amount" Type="money" Nullable="false" />
+    <Property Name="Term_Years" Type="int" Nullable="false" />
+    <Property Name="AmountPaid" Type="money" />
+    <Property Name="PaymentDate" Type="date" />
+  </EntityType>
+  <EntityType Name="LoanStatuses">
+    <Key>
+      <PropertyRef Name="LoanStatusId" />
+    </Key>
+    <Property Name="LoanStatusId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="LoanStatusName" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="LoanStatusDescription" Type="nvarchar" MaxLength="200" />
+  </EntityType>
+  <EntityType Name="LoanTypes">
+    <Key>
+      <PropertyRef Name="LoanTypeId" />
+    </Key>
+    <Property Name="LoanTypeId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="LoanName" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Description" Type="nvarchar" MaxLength="200" />
+    <Property Name="InterestRate" Type="decimal" Precision="5" Scale="2" />
+  </EntityType>
+  <EntityType Name="Members">
+    <Key>
+      <PropertyRef Name="MemberId" />
+    </Key>
+    <Property Name="MemberId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="FirstName" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="LastName" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="DOB" Type="date" Nullable="false" />
+    <Property Name="SSN" Type="int" />
+    <Property Name="AddressLine1" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="AddressLine2" Type="nvarchar" MaxLength="50" />
+    <Property Name="City" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="State" Type="nvarchar" MaxLength="2" Nullable="false" />
+    <Property Name="Zipcode" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Email" Type="nvarchar" MaxLength="256" Nullable="false" />
+    <Property Name="Phone" Type="nvarchar" MaxLength="50" />
+    <Property Name="JoinDate" Type="date" Nullable="false" />
+  </EntityType>
+  <EntityType Name="TermDeposits">
+    <Key>
+      <PropertyRef Name="TermDepositId" />
+    </Key>
+    <Property Name="TermDepositId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="MemberId" Type="int" Nullable="false" />
+    <Property Name="Amount" Type="money" Nullable="false" />
+    <Property Name="Duration_Months" Type="int" Nullable="false" />
+    <Property Name="StartDate" Type="date" Nullable="false" />
+    <Property Name="EndDate" Type="date" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Transactions">
+    <Key>
+      <PropertyRef Name="TransactionId" />
+    </Key>
+    <Property Name="TransactionId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="TransTypeId" Type="int" Nullable="false" />
+    <Property Name="AccountNumber" Type="int" Nullable="false" />
+    <Property Name="AccountForTransfer" Type="int" />
+    <Property Name="TransactionDate" Type="date" Nullable="false" />
+    <Property Name="Amount" Type="money" Nullable="false" />
+  </EntityType>
+  <EntityType Name="TransactionTypes">
+    <Key>
+      <PropertyRef Name="TransTypeId" />
+    </Key>
+    <Property Name="TransTypeId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="TransTypeName" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Description" Type="nvarchar" MaxLength="200" />
+  </EntityType>
+  <Association Name="FK_Accounts_AccountStatuses">
+    <End Role="AccountStatuses" Type="Self.AccountStatuses" Multiplicity="1" />
+    <End Role="Accounts" Type="Self.Accounts" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AccountStatuses">
+        <PropertyRef Name="AccountStatusCode" />
+      </Principal>
+      <Dependent Role="Accounts">
+        <PropertyRef Name="AccountStatusCode" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Accounts_AccountTypes">
+    <End Role="AccountTypes" Type="Self.AccountTypes" Multiplicity="1" />
+    <End Role="Accounts" Type="Self.Accounts" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AccountTypes">
+        <PropertyRef Name="AccountTypeId" />
+      </Principal>
+      <Dependent Role="Accounts">
+        <PropertyRef Name="AccountTypeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Accounts_Members">
+    <End Role="Members" Type="Self.Members" Multiplicity="1" />
+    <End Role="Accounts" Type="Self.Accounts" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Members">
+        <PropertyRef Name="MemberId" />
+      </Principal>
+      <Dependent Role="Accounts">
+        <PropertyRef Name="MemberId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Loans_LoanStatuses">
+    <End Role="LoanStatuses" Type="Self.LoanStatuses" Multiplicity="1" />
+    <End Role="Loans" Type="Self.Loans" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="LoanStatuses">
+        <PropertyRef Name="LoanStatusId" />
+      </Principal>
+      <Dependent Role="Loans">
+        <PropertyRef Name="LoanStatusId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Loans_LoanTypes">
+    <End Role="LoanTypes" Type="Self.LoanTypes" Multiplicity="1" />
+    <End Role="Loans" Type="Self.Loans" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="LoanTypes">
+        <PropertyRef Name="LoanTypeId" />
+      </Principal>
+      <Dependent Role="Loans">
+        <PropertyRef Name="LoanTypeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Loans_Members">
+    <End Role="Members" Type="Self.Members" Multiplicity="1" />
+    <End Role="Loans" Type="Self.Loans" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Members">
+        <PropertyRef Name="MemberId" />
+      </Principal>
+      <Dependent Role="Loans">
+        <PropertyRef Name="MemberId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TermDeposits_Members">
+    <End Role="Members" Type="Self.Members" Multiplicity="1" />
+    <End Role="TermDeposits" Type="Self.TermDeposits" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Members">
+        <PropertyRef Name="MemberId" />
+      </Principal>
+      <Dependent Role="TermDeposits">
+        <PropertyRef Name="MemberId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Transactions_Accounts">
+    <End Role="Accounts" Type="Self.Accounts" Multiplicity="1" />
+    <End Role="Transactions" Type="Self.Transactions" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Accounts">
+        <PropertyRef Name="AccountNumber" />
+      </Principal>
+      <Dependent Role="Transactions">
+        <PropertyRef Name="AccountNumber" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Transactions_TransactionTypes">
+    <End Role="TransactionTypes" Type="Self.TransactionTypes" Multiplicity="1" />
+    <End Role="Transactions" Type="Self.Transactions" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TransactionTypes">
+        <PropertyRef Name="TransTypeId" />
+      </Principal>
+      <Dependent Role="Transactions">
+        <PropertyRef Name="TransTypeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="BankDbModelStoreContainer">
+    <EntitySet Name="Accounts" EntityType="Self.Accounts" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="AccountStatuses" EntityType="Self.AccountStatuses" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="AccountTypes" EntityType="Self.AccountTypes" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Loans" EntityType="Self.Loans" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="LoanStatuses" EntityType="Self.LoanStatuses" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="LoanTypes" EntityType="Self.LoanTypes" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Members" EntityType="Self.Members" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="TermDeposits" EntityType="Self.TermDeposits" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Transactions" EntityType="Self.Transactions" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="TransactionTypes" EntityType="Self.TransactionTypes" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_Accounts_AccountStatuses" Association="Self.FK_Accounts_AccountStatuses">
+      <End Role="AccountStatuses" EntitySet="AccountStatuses" />
+      <End Role="Accounts" EntitySet="Accounts" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Accounts_AccountTypes" Association="Self.FK_Accounts_AccountTypes">
+      <End Role="AccountTypes" EntitySet="AccountTypes" />
+      <End Role="Accounts" EntitySet="Accounts" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Accounts_Members" Association="Self.FK_Accounts_Members">
+      <End Role="Members" EntitySet="Members" />
+      <End Role="Accounts" EntitySet="Accounts" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Loans_LoanStatuses" Association="Self.FK_Loans_LoanStatuses">
+      <End Role="LoanStatuses" EntitySet="LoanStatuses" />
+      <End Role="Loans" EntitySet="Loans" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Loans_LoanTypes" Association="Self.FK_Loans_LoanTypes">
+      <End Role="LoanTypes" EntitySet="LoanTypes" />
+      <End Role="Loans" EntitySet="Loans" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Loans_Members" Association="Self.FK_Loans_Members">
+      <End Role="Members" EntitySet="Members" />
+      <End Role="Loans" EntitySet="Loans" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TermDeposits_Members" Association="Self.FK_TermDeposits_Members">
+      <End Role="Members" EntitySet="Members" />
+      <End Role="TermDeposits" EntitySet="TermDeposits" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Transactions_Accounts" Association="Self.FK_Transactions_Accounts">
+      <End Role="Accounts" EntitySet="Accounts" />
+      <End Role="Transactions" EntitySet="Transactions" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Transactions_TransactionTypes" Association="Self.FK_Transactions_TransactionTypes">
+      <End Role="TransactionTypes" EntitySet="TransactionTypes" />
+      <End Role="Transactions" EntitySet="Transactions" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
